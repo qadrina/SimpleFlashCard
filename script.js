@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayCard() {
     questionElement.textContent = flashcards[currentCard].question;
     answerElement.textContent = flashcards[currentCard].answer;
+    flashcardElement.classList.remove("is-flipped");
   }
 
   document.getElementById("flip-card").addEventListener("click", () => {
