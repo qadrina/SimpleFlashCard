@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manage Flashcards</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        background: #f7f7f7;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      button {
+        margin: 5px;
+      }
+      input {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Manage Flashcards</h2>
+
+    <div>
+      <input type="text" id="new-question" placeholder="Enter question" />
+      <input type="text" id="new-answer" placeholder="Enter answer" />
+      <button onclick="addFlashcard()">Add</button>
+    </div>
+
+    <table id="flashcard-table">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Answer</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <button onclick="goBack()">Back to Flashcards</button>
+
+    <script>
+      let flashcards = JSON.parse(localStorage.getItem("flashcards")) || [];
+
+      function renderTable() {
+        const tbody = document.querySelector("#flashcard-table tbody");
+        tbody.innerHTML = "";
+
+        flashcards.forEach((card, index) => {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+          <td><input value="${card.question}" onchange="editQuestion(${index}, this.value)" /></td>
+          <td><input value="${card.answer}" onchange="editAnswer(${index}, this.value)" /></td>
+          <td>
+            <button onclick="deleteFlashcard(${index})">Delete</button>
+          </td>
+        `;
+
+          tbody.appendChild(row);
+        });
+
+        localStorage.setItem("flashcards", JSON.stringify(flashcards));
+      }
+
+      function addFlashcard() {
+        const question = document.getElementById("new-question").value.trim();
+        const answer = document.getElementById("new-answer").value.trim();
+
+        if (!question || !answer) return alert("Both fields are required!");
+
+        flashcards.push({ question, answer });
+        document.getElementById("new-question").value = "";
+        document.getElementById("new-answer").value = "";
+        renderTable();
+      }
+
+      function editQuestion(index, newQuestion) {
+        flashcards[index].question = newQuestion;
+        renderTable();
+      }
+
+      function editAnswer(index, newAnswer) {
+        flashcards[index].answer = newAnswer;
+        renderTable();
+      }
+
+      function deleteFlashcard(index) {
+        if (confirm("Delete this flashcard?")) {
+          flashcards.splice(index, 1);
+          renderTable();
+        }
+      }
+
+      function goBack() {
+        localStorage.setItem("flashcards", JSON.stringify(flashcards));
+        window.location.href = "index.html";
+      }
+
+      renderTable();
+    </script>
+  </body>
+</html>

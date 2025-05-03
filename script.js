@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const flashcards = [
-    { question: "魚", answer: "さかな Fish" },
-    { question: "図書館", answer: "としょかん Library" },
-    { question: "動物", answer: "どうぶつ Animal" },
-  ];
+  const flashcards = JSON.parse(localStorage.getItem("flashcards")) || [];
+  /*const storedCards = JSON.parse(localStorage.getItem("flashcards"));
+  const flashcards = storedCards && storedCards.length ? storedCards : [
+  { question: "魚", answer: "さかな Fish" },
+  { question: "図書館", answer: "としょかん Library" },
+  { question: "動物", answer: "どうぶつ Animal" },
+  ];*/
 
   let currentCard = 0;
 
